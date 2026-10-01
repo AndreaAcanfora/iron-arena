@@ -7,6 +7,8 @@ export interface MovementStats {
   walkBack: number;
   dashSpeed: number;
   dashFrames: number;
+  /** Speed while holding forward after a dash. */
+  runSpeed: number;
   backdashSpeed: number;
   backdashFrames: number;
   /** Strike-invulnerable frames at the start of a backdash (the dodge). */

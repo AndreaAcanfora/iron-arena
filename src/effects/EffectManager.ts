@@ -37,6 +37,7 @@ const SYSTEMS: Readonly<Record<SystemName, SystemSpec>> = {
 export class EffectManager {
   readonly root = new THREE.Group();
   private readonly systems: Record<SystemName, ParticleSystem>;
+  private readonly systemList: readonly ParticleSystem[];
   private readonly hits: HitEffect;
   private readonly fireEmitters: THREE.Vector3[] = [];
   private fireAccum = 0;
@@ -69,6 +70,7 @@ export class EffectManager {
       flame: make(SYSTEMS.flame),
       ember: make(SYSTEMS.ember),
     };
+    this.systemList = Object.values(this.systems);
     const slashTex = assets.getTexture('slash');
     slashTex.colorSpace = THREE.SRGBColorSpace;
     this.hits = new HitEffect(slashTex);
@@ -82,7 +84,7 @@ export class EffectManager {
   }
 
   setViewport(heightPx: number, camera: THREE.PerspectiveCamera): void {
-    for (const s of Object.values(this.systems)) s.setViewport(heightPx, camera);
+    for (const s of this.systemList) s.setViewport(heightPx, camera);
   }
 
   private bind(): void {
@@ -165,7 +167,7 @@ export class EffectManager {
     this.time += dt;
     this.emitFire(dt);
     this.emitEmbers(dt);
-    for (const s of Object.values(this.systems)) s.update(dt);
+    for (const s of this.systemList) s.update(dt);
     this.hits.update(dt);
   }
 
@@ -205,7 +207,7 @@ export class EffectManager {
 
   dispose(): void {
     for (const off of this.unsubscribe) off();
-    for (const s of Object.values(this.systems)) s.dispose();
+    for (const s of this.systemList) s.dispose();
     this.hits.dispose();
     this.root.removeFromParent();
   }

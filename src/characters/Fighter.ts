@@ -19,6 +19,7 @@ export type FighterState =
   | 'air'
   | 'land'
   | 'dash'
+  | 'run'
   | 'backdash'
   | 'block'
   | 'blockstun'
@@ -54,6 +55,18 @@ const KNOCKDOWN_FRAMES = 42;
 const GETUP_FRAMES = 34;
 const GROUND_FRICTION = 22;
 const AIR_ATTACK_LANDING_LAG = 6;
+
+const GRABBABLE_STATES: ReadonlySet<FighterState> = new Set<FighterState>([
+  'idle',
+  'walk',
+  'crouch',
+  'block',
+  'land',
+  'attack',
+  'dash',
+  'run',
+  'grab',
+]);
 
 const ATTACK_BITS: ReadonlyArray<readonly [number, AttackInput]> = [
   [Action.Light, 'light'],
@@ -161,7 +174,7 @@ export class Fighter {
   get grabbable(): boolean {
     return (
       this.grounded &&
-      ['idle', 'walk', 'crouch', 'block', 'land', 'attack', 'dash', 'grab'].includes(this.state) &&
+      GRABBABLE_STATES.has(this.state) &&
       !(this.state === 'attack' && this.attack?.stance === 'air')
     );
   }
@@ -229,6 +242,19 @@ export class Fighter {
         this.updateAir();
         break;
       case 'dash':
+        if (this.stateFrame >= this.stateDuration) {
+          if (has(frame.held, this.facing > 0 ? Action.Right : Action.Left)) {
+            this.setState('run');
+            this.playAnim('run', { fade: 0.12 });
+          } else {
+            this.vx = 0;
+            this.toNeutral();
+          }
+        }
+        break;
+      case 'run':
+        this.updateRun(frame, opponent);
+        break;
       case 'backdash':
         if (this.stateFrame >= this.stateDuration) {
           this.vx = 0;
@@ -360,8 +386,27 @@ export class Fighter {
     this.setState(back ? 'backdash' : 'dash', frames);
     this.vx = (back ? -m.backdashSpeed : m.dashSpeed) * this.facing;
     if (back) this.invulnerable = m.backdashInvuln;
-    this.playAnim(back ? 'dashBack' : 'run', { duration: frames * SIM_DT, fade: 0.05 });
+    this.playAnim(back ? 'dashBack' : 'dashForward', { duration: frames * SIM_DT, fade: 0.05 });
     this.ctx.events.emit('dash', { fighter: this.index, x: this.x, back });
+  }
+
+  /** Running: holding forward after a dash. Any other input drops back to neutral handling. */
+  private updateRun(input: InputFrame, opponent: Fighter): void {
+    const fwdBit = this.facing > 0 ? Action.Right : Action.Left;
+    const otherInput =
+      input.pressed & (Action.Light | Action.Heavy | Action.Kick | Action.Grab | Action.Up | Action.Block | Action.Down);
+    if (!has(input.held, fwdBit) || otherInput !== 0 || has(input.held, Action.Down) || has(input.held, Action.Up)) {
+      this.vx = 0;
+      this.setState('idle');
+      this.neutral(input);
+      return;
+    }
+    this.vx = this.facing * this.config.movement.runSpeed;
+    // Stop when running into the opponent's body.
+    if (Math.abs(opponent.x - this.x) < this.config.pushHalfWidth + opponent.config.pushHalfWidth + 0.05) {
+      this.vx = 0;
+      this.toNeutral();
+    }
   }
 
   private takeOff(): void {

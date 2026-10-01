@@ -93,6 +93,12 @@ export class Character {
   dispose(): void {
     this.animation.dispose();
     for (const m of this.materials) m.dispose();
+    // Cloned skeletons own their bone textures; geometries stay shared with the asset cache.
+    const skeletons = new Set<THREE.Skeleton>();
+    this.model.traverse((obj) => {
+      if (obj instanceof THREE.SkinnedMesh) skeletons.add(obj.skeleton);
+    });
+    for (const s of skeletons) s.dispose();
     this.root.removeFromParent();
   }
 }

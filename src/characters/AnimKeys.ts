@@ -7,6 +7,7 @@ export const ANIM_KEYS = [
   'walkForward',
   'walkBack',
   'run',
+  'dashForward',
   'dashBack',
   'jumpStart',
   'jumpAir',

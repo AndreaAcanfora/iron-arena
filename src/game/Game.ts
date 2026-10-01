@@ -203,6 +203,7 @@ export class Game {
     }
     this.ui.update(dt);
     this.renderer.render(this.scene, this.fightCamera.camera);
+    this.renderer.adapt(dt);
   }
 
   private project(x: number, y: number): { x: number; y: number } {
