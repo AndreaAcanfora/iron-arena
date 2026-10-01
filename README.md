@@ -4,6 +4,8 @@ A 3D arcade fighting game (2.5D) for the browser, built with **Three.js + TypeSc
 This is a playable vertical slice: two original fighters, a dark-fantasy arena, a frame-data combat system,
 combos, grabs, rounds, VFX, audio and a full UI.
 
+**Play online:** https://andreaacanfora.github.io/iron-arena/ (deployed by GitHub Actions on every push to `main`).
+
 ```bash
 npm install
 npm run dev        # http://localhost:5173
