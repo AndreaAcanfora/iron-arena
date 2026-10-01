@@ -86,7 +86,7 @@ export class Character {
 
     const flash = f.flash;
     for (const m of this.materials) {
-      m.emissive.copy(HIT_FLASH).multiplyScalar(flash * 0.8);
+      m.emissive.copy(HIT_FLASH).multiplyScalar(flash * flash * 0.45);
     }
   }
 

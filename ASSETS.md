@@ -36,7 +36,7 @@ Known issues:
 
 | Name | Author | URL | License | Type | Used for |
 |---|---|---|---|---|---|
-| Particle Pack: `spark_05`, `smoke_04`, `flame_04`, `circle_05`, `slash_02`, `light_01`, `dirt_02` | Kenney | https://kenney.nl/assets/particle-pack | CC0 | PNG sprites (resized to 128px) | Hit sparks, smoke, torch flames, blood, slashes, glow, dust |
+| Particle Pack: `circle_05`, `star_09`, `smoke_04`, `fire_01`, `dirt_03`, `slash_02` | Kenney | https://kenney.nl/assets/particle-pack | CC0 | PNG sprites (resized to 128px) | Sparks, glow, embers, blood (`circle_05`), impact flash, smoke/dust, torch fire, debris, slashes |
 
 ## Audio
 

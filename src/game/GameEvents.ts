@@ -19,13 +19,15 @@ export interface GameEvents {
     comboCount: number;
     heavy: boolean;
     finisherName: string | null;
+    /** Attacker facing: +1 right, -1 left. */
+    direction: 1 | -1;
   };
   block: { attacker: PlayerIndex; victim: PlayerIndex; attack: AttackDefinition; point: ImpactPoint };
   attackStart: { fighter: PlayerIndex; attack: AttackDefinition };
   grabStart: { fighter: PlayerIndex };
   grabConnect: { attacker: PlayerIndex; victim: PlayerIndex; point: ImpactPoint };
   grabTech: { point: ImpactPoint };
-  throw: { attacker: PlayerIndex; victim: PlayerIndex; damage: number; point: ImpactPoint };
+  throw: { attacker: PlayerIndex; victim: PlayerIndex; damage: number; point: ImpactPoint; direction: 1 | -1 };
   jump: { fighter: PlayerIndex; x: number };
   land: { fighter: PlayerIndex; x: number; hard: boolean };
   dash: { fighter: PlayerIndex; x: number; back: boolean };

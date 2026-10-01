@@ -137,6 +137,7 @@ export class CombatSystem {
       victim: victim.index,
       damage: g.damage,
       point: { x: victim.x, y: 1.1 },
+      direction: attacker.facing,
     });
   }
 
@@ -195,6 +196,7 @@ export class CombatSystem {
         comboCount: victim.comboTaken,
         heavy: attack.shake >= 0.3,
         finisherName: attacker.comboName,
+        direction: attacker.facing,
       });
     }
     // Cornered victims can't be pushed further: the attacker recoils instead.

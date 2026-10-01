@@ -81,7 +81,7 @@ export class Arena {
     const geo = new THREE.PlaneGeometry(f.width, f.depth);
     geo.rotateX(-Math.PI / 2);
     this.ownedGeometries.push(geo);
-    const floor = new THREE.Mesh(geo, this.pbrMaterial(f, 0x857a72));
+    const floor = new THREE.Mesh(geo, this.pbrMaterial(f, 0x8a8686));
     floor.receiveShadow = true;
     floor.name = 'floor';
     this.root.add(floor);

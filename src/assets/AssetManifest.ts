@@ -21,13 +21,12 @@ export const TEXTURES = {
   wallDiff: `${BASE}textures/wall_diff.jpg`,
   wallNormal: `${BASE}textures/wall_nor_gl.jpg`,
   wallArm: `${BASE}textures/wall_arm.jpg`,
-  spark: `${BASE}vfx/spark.png`,
+  dot: `${BASE}vfx/dot.png`,
+  star: `${BASE}vfx/star.png`,
   smoke: `${BASE}vfx/smoke.png`,
   flame: `${BASE}vfx/flame.png`,
-  blood: `${BASE}vfx/blood.png`,
+  debris: `${BASE}vfx/debris.png`,
   slash: `${BASE}vfx/slash.png`,
-  glow: `${BASE}vfx/glow.png`,
-  dust: `${BASE}vfx/dust.png`,
 } as const;
 
 export const HDRIS = {

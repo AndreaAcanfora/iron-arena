@@ -94,7 +94,7 @@ sfx swishes "swish-7.wav"               whoosh_heavy
 
 # Particle sprites: 512px originals downscaled to 128px.
 V="$A/vfx"
-for pair in spark_05:spark smoke_04:smoke flame_04:flame circle_05:blood slash_02:slash light_01:glow dirt_02:dust; do
+for pair in circle_05:dot star_09:star smoke_04:smoke fire_01:flame dirt_03:debris slash_02:slash; do
   pick particles "PNG (Transparent)/${pair%%:*}.png" "$V/${pair##*:}.png"
   if command -v sips >/dev/null 2>&1; then sips -Z 128 "$V/${pair##*:}.png" >/dev/null; fi
 done

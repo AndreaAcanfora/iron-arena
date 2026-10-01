@@ -1,12 +1,14 @@
 import * as THREE from 'three';
 import { AssetManager } from '../assets/AssetManager';
 import { Arena } from '../arena/Arena';
+import { AudioManager } from '../audio/AudioManager';
 import { EMBER_KEEP } from '../arena/arenas/emberKeep';
 import { FightCamera } from '../camera/FightCamera';
 import type { FighterConfig } from '../characters/FighterConfig';
 import { ROSTER } from '../characters/fighters';
 import { EventBus } from '../core/EventBus';
 import { HitboxDebug } from '../debug/HitboxDebug';
+import { EffectManager } from '../effects/EffectManager';
 import { InputManager } from '../input/InputManager';
 import { KeyboardInputSource, NullInputSource } from '../input/InputSource';
 import { PLAYER1_KEYS, PLAYER2_KEYS } from '../input/KeyBindings';
@@ -36,6 +38,8 @@ export class Game {
   private readonly rules: MatchRules = DEFAULT_RULES;
   private readonly projectTmp = new THREE.Vector3();
   private arena: Arena | null = null;
+  private effects: EffectManager | null = null;
+  private audio: AudioManager | null = null;
   match: Match | null = null;
   round: RoundController | null = null;
   private lineup: [FighterConfig, FighterConfig];
@@ -59,12 +63,19 @@ export class Game {
 
     this.ui = new GameUI(uiRoot, this.events, (x, y) => this.project(x, y), ROSTER, {
       onStart: (p1, p2) => {
+        this.audio?.uiConfirm();
         this.lineup = [p1, p2];
         this.states.go('match');
       },
-      onNavigate: () => undefined,
-      onRematch: () => this.states.go('match'),
-      onMenu: () => this.states.go('menu'),
+      onNavigate: () => this.audio?.uiSelect(),
+      onRematch: () => {
+        this.audio?.uiConfirm();
+        this.states.go('match');
+      },
+      onMenu: () => {
+        this.audio?.uiSelect();
+        this.states.go('menu');
+      },
     });
 
     this.states.onEnter('menu', () => this.enterMenu());
@@ -87,6 +98,7 @@ export class Game {
         this.hitboxDebug.toggle();
       }
       if (e.code === 'Escape' && this.states.is('match')) this.states.go('menu');
+      if (e.code === 'KeyM') this.audio?.toggleMute();
     });
   }
 
@@ -94,6 +106,15 @@ export class Game {
     await this.assets.loadAll((loaded, total) => this.ui.setLoading(loaded / total));
     this.arena = new Arena(EMBER_KEEP, this.assets);
     this.arena.build(this.scene, this.renderer.webgl);
+
+    this.effects = new EffectManager(this.assets, this.events, this.arena.halfWidth);
+    this.effects.setFireEmitters(this.arena.flameEmitters);
+    this.scene.add(this.effects.root);
+
+    this.audio = new AudioManager(this.arena.halfWidth);
+    await this.audio.load(this.assets);
+    this.audio.bind(this.events);
+    this.audio.playMusic('musicBattle');
     // Compile shaders up-front to avoid a hitch on the first frame of the fight.
     this.createMatch(false);
     this.renderer.webgl.compile(this.scene, this.fightCamera.camera);
@@ -109,6 +130,7 @@ export class Game {
     this.ui.hideResult();
     this.createMatch(false);
     this.ui.showMenu(true);
+    this.audio?.setMusicLevel(0.45);
   }
 
   private enterMatch(): void {
@@ -144,6 +166,7 @@ export class Game {
       this.scene,
     );
     this.round = playable ? new RoundController(this.match, this.rules, this.events) : null;
+    this.effects?.clearTransient();
     this.match.resetPositions();
     this.match.render(0, 1);
     this.fightCamera.snap(this.match.focusA, this.match.focusB);
@@ -164,6 +187,10 @@ export class Game {
 
   private render(dt: number, alpha: number): void {
     this.arena?.update(dt);
+    if (this.effects) {
+      this.effects.setViewport(this.renderer.webgl.domElement.clientHeight, this.fightCamera.camera);
+      this.effects.update(dt);
+    }
     const match = this.match;
     if (match) {
       match.render(dt, alpha);
