@@ -21,12 +21,12 @@ export interface FightCameraConfig {
 
 export const DEFAULT_CAMERA: FightCameraConfig = {
   fov: 38,
-  minDistance: 7.5,
-  maxDistance: 12.5,
+  minDistance: 6.6,
+  maxDistance: 11.5,
   minGap: 2,
   maxGap: 12,
-  height: 2.6,
-  lookHeight: 1.45,
+  height: 2.3,
+  lookHeight: 1.3,
   focusLimitX: 5.5,
   followRate: 5,
   swayAmount: 0.25,
