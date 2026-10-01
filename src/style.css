@@ -1,0 +1,44 @@
+:root {
+  --blood: #c21d12;
+  --ember: #ff7a2e;
+  --gold: #f2c45a;
+  --ink: #0b0707;
+  --bone: #efe6d8;
+  --p1: #e0482f;
+  --p2: #3f8fd6;
+  --font-display: 'Cinzel', 'Trajan Pro', Georgia, serif;
+  --font-ui: 'Oswald', 'Impact', 'Arial Narrow', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--ink);
+  color: var(--bone);
+  font-family: var(--font-ui);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#app {
+  position: fixed;
+  inset: 0;
+}
+
+#scene {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#ui {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
