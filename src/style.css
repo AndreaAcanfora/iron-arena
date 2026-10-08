@@ -733,6 +733,52 @@ kbd {
   letter-spacing: 0.1em;
 }
 
+/* ------------------------------------------------------------ desktop only */
+
+.desktop-only {
+  padding: 24px 16px;
+  text-align: center;
+  background: radial-gradient(ellipse at 50% 120%, rgba(255, 90, 20, 0.25), transparent 60%),
+    radial-gradient(ellipse at center, #2a0d08 0%, var(--ink) 70%);
+}
+
+.desktop-only__box {
+  max-width: 420px;
+  padding: 20px 22px;
+  background: linear-gradient(180deg, rgba(30, 14, 10, 0.9), rgba(12, 6, 6, 0.92));
+  border: 1px solid rgba(242, 196, 90, 0.4);
+  clip-path: polygon(14px 0, calc(100% - 14px) 0, 100% 14px, 100% calc(100% - 14px), calc(100% - 14px) 100%, 14px 100%, 0 calc(100% - 14px), 0 14px);
+}
+
+.desktop-only__heading {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 22px;
+  letter-spacing: 0.35em;
+  color: var(--gold);
+}
+
+.desktop-only__text {
+  margin: 12px 0 0;
+  font-size: 16px;
+  line-height: 1.5;
+  opacity: 0.85;
+}
+
+.desktop-only__anyway {
+  margin-top: 4px;
+  padding: 10px;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  color: var(--bone);
+  opacity: 0.55;
+  background: none;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 @media (max-height: 640px) {
   .menu__controls,
   .menu__hint {
