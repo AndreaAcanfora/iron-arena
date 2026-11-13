@@ -8,7 +8,8 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
-    "fetch-assets": "bash scripts/fetch-assets.sh"
+    "fetch-assets": "bash scripts/fetch-assets.sh",
+    "test": "vitest run"
   },
   "dependencies": {
     "three": "^0.186.1"
@@ -16,6 +17,7 @@
   "devDependencies": {
     "@types/three": "^0.186.0",
     "typescript": "^7.0.2",
-    "vite": "^8.3.2"
+    "vite": "^8.3.2",
+    "vitest": "^5.1.0"
   }
 }
