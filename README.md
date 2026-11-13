@@ -11,6 +11,7 @@ npm install
 npm run dev        # http://localhost:5173
 npm run build      # typecheck + production build in dist/
 npm run typecheck
+npm test           # headless combat tests (Vitest)
 npm run fetch-assets   # re-download third-party CC0 assets (see ASSETS.md)
 ```
 
@@ -79,6 +80,16 @@ Key principles:
 - **New arena:** write an `ArenaConfig` like `arenas/emberKeep.ts`.
 - **AI / gamepad / network players:** implement `InputSource.sample(out: InputFrame)` and pass it to `Match`.
 - **Rebinding:** `KeyBindings.ts` maps actions to `KeyboardEvent.code` arrays.
+
+## Tests
+
+`npm test` runs the simulation headless: `tests/arena.ts` steps two `Fighter`s and the `CombatSystem`
+tick by tick, like `Match.fixedUpdate`, with scripted `InputFrame`s and no Three.js. The tests cover hits,
+whiffs, counter hits, trades, KO, standing/crouching guard vs mid/low, chip damage, a full combo with damage
+scaling, grabs through a guard, grab techs, body pushing at the wall and backdash invulnerability, plus
+frame-data phases, `MoveList`, `ComboSystem`, shape overlaps and a sanity check of every fighter in `ROSTER`
+(unique ids, animations, a move for every button and stance, combo finishers that exist).
+When you add a fighter, the data checks run on it automatically.
 
 ## Performance notes
 
